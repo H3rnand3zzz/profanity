@@ -3,7 +3,8 @@ core_sources = \
 	src/log.c src/common.c \
 	src/chatlog.c src/chatlog.h \
 	src/database.h src/database.c \
-	src/log.h src/profanity.c src/common.h \
+	src/xmpp/jingle.c src/xmpp/jingle.h src/log.h src/profanity.c src/common.h \
+	src/xmpp/ibb.c src/xmpp/ibb.h \
 	src/profanity.h src/xmpp/chat_session.c \
 	src/xmpp/chat_session.h src/xmpp/muc.c src/xmpp/muc.h src/xmpp/jid.h src/xmpp/jid.c \
 	src/xmpp/chat_state.h src/xmpp/chat_state.c \
