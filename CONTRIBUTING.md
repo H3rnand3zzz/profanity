@@ -1,17 +1,21 @@
 # Contributing to Profanity
 
 ## Build
-
 Please follow the [build section](https://profanity-im.github.io/guide/latest/build.html) in our user guide.
 You might also take a look at the `Dockerfile.*` in the root directory.
+
+<hr/>
 
 ## Submitting patches
 We recommend for people to always work on a dedicated git branch for each fix or feature.
 Don't work on master.
 So that they can easily pull master and rebase their work if needed.
 
-For fixing (reported) bugs we usually use `git checkout -b fix/issuenumber-somedescription`.
-When working on a new feature we usually use `git checkout -b feature/optionalissuenumber-somedescription`.
+### Branch naming
+We have an optional naming policy:
+ - For fixing (reported) bugs `git checkout -b fix/issuenumber-somedescription`.
+ - For a new feature `git checkout -b feature/optionalissuenumber-somedescription`.
+ - For cleanup `git checkout -b cleanup/somedescription`.
 
 However this is not a rule just a recommendation to keep an overview of things.
 If your change isn't a bugfix or new feature you can also just use any branch name.
@@ -42,7 +46,6 @@ If using GitHub is out of the question but you are okay using another service (i
 We will then pull from your repository and merge manually.
 
 ### Rules
-
 * When fixing a bug, describe it and how your patch fixes it.
 * When fixing a reported issue add an `Fixes https://github.com/profanity-im/profanity/issues/23` in the commit body.
 * When adding a new feature add a description of the feature and how it should be used (workflow).
@@ -54,9 +57,12 @@ We will then pull from your repository and merge manually.
 * Squash fixup commits into one
 * If applicable, document how to test the functionality
 
-## Hints and Pitfalls
+<hr/>
 
+## Hints and Pitfalls
 * When adding a new hotkey/shortcut make sure it's not registered in Profanity already. And also that it's not a default shortcut of readline.
+
+<hr/>
 
 ## Coding style
 Follow the style already present ;-)
@@ -96,6 +102,8 @@ If you're in a hurry you can add the `--no-verify` flag when issuing `git push`
 and the `pre-push` hook will be skipped.
 
 *Note:* We provide a config file that describes our coding style for clang. But due to a mistake on their side it might happen that you can get a different result that what we expect. See [here](https://github.com/profanity-im/profanity/pull/1774) and [here](https://github.com/profanity-im/profanity/pull/1828) for details. We will try to always run latest clang-format.
+
+<hr/>
 
 ## Finding mistakes
 Test your changes with the following tools to find mistakes.
