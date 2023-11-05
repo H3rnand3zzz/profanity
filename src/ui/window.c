@@ -63,6 +63,9 @@
 #include "xmpp/roster_list.h"
 #include "xmpp/connection.h"
 #include "database.h"
+#include <time.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #define CONS_WIN_TITLE "Profanity. Type /help for help information."
 #define XML_WIN_TITLE  "XML Console"
@@ -1966,13 +1969,19 @@ win_print_trackbar(ProfWin* window)
     wattroff(window->layout->win, theme_attrs(THEME_TRACKBAR));
 }
 
-void
-win_redraw(ProfWin* window)
-{
-    int size;
-    werase(window->layout->win);
-    size = buffer_size(window->layout->buffer);
+pthread_mutex_t redraw_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+void* 
+_async_redraw(void* arg) {
+    pthread_mutex_lock(&redraw_mutex);
+    ProfWin* window = (ProfWin*)arg;
+
+    clock_t start = clock();
+    log_warning("win_redraw START (Async)");
+
+    werase(window->layout->win);
+    int size = buffer_size(window->layout->buffer);
+    log_warning("[win_redraw] buffer size: %d");
     for (int i = 0; i < size; i++) {
         ProfBuffEntry* e = buffer_get_entry(window->layout->buffer, i);
 
@@ -1984,6 +1993,23 @@ win_redraw(ProfWin* window)
             _win_print_internal(window, e->show_char, e->pad_indent, e->time, e->flags, e->theme_item, e->display_from, e->message, e->receipt);
         }
     }
+
+    log_warning("win_redraw END (Async), took: %f ms", ((double)(clock() - start)) * 1000.0 / CLOCKS_PER_SEC);
+
+    pthread_mutex_unlock(&redraw_mutex);
+    pthread_exit(NULL);
+}
+
+void
+win_redraw(ProfWin* window)
+{
+    pthread_t thread;
+
+    if (pthread_create(&thread, NULL, _async_redraw, window) != 0) {
+        log_error("Unable to pthread_create in win_redraw");
+        return;
+    }
+
 }
 
 void

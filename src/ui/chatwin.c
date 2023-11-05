@@ -614,6 +614,8 @@ _chatwin_history(ProfChatWin* chatwin, const char* const contact_barejid)
 gboolean
 chatwin_db_history(ProfChatWin* chatwin, const char* start_time, char* end_time, gboolean flip)
 {
+    clock_t start = clock();
+    log_warning("chatwin_db_history START");
     if (!end_time) {
         end_time = buffer_size(((ProfWin*)chatwin)->layout->buffer) == 0 ? NULL : g_date_time_format_iso8601(buffer_get_entry(((ProfWin*)chatwin)->layout->buffer, 0)->time);
     }
@@ -638,6 +640,7 @@ chatwin_db_history(ProfChatWin* chatwin, const char* start_time, char* end_time,
     }
 
     g_slist_free_full(history, (GDestroyNotify)message_free);
+    log_warning("chatwin_db_history END (before redraw), took: %f ms", ((double)(clock() - start)) * 1000.0 / CLOCKS_PER_SEC);
     win_redraw((ProfWin*)chatwin);
 
     return has_items;
