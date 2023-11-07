@@ -1670,6 +1670,9 @@ static void
 _win_print_internal(ProfWin* window, const char* show_char, int pad_indent, GDateTime* time,
                     int flags, theme_item_t theme_item, const char* const from, const char* const message, DeliveryReceipt* receipt)
 {
+    if (!message) {
+        return;
+    }
     // flags : 1st bit =  0/1 - me/not me. define: NO_ME
     //         2nd bit =  0/1 - date/no date. define: NO_DATE
     //         3rd bit =  0/1 - eol/no eol. define: NO_EOL

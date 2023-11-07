@@ -141,6 +141,9 @@ autocomplete_update(Autocomplete ac, char** items)
 void
 autocomplete_add_unsorted(Autocomplete ac, const char* item, const gboolean is_reversed)
 {
+    if (!item) {
+        return;
+    }
     if (ac) {
         char* item_cpy;
         GList* curr = g_list_find_custom(ac->items, item, (GCompareFunc)strcmp);

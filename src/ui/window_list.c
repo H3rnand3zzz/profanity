@@ -1307,6 +1307,9 @@ wins_get_next_attention(void)
 void
 wins_add_urls_ac(const ProfWin* const win, const ProfMessage* const message, const gboolean flip)
 {
+    if (!message->plain) {
+        return;
+    }
     GRegex* regex;
     GMatchInfo* match_info;
 

@@ -479,6 +479,9 @@ plugins_on_disconnect(const char* const account_name, const char* const fulljid)
 char*
 plugins_pre_chat_message_display(const char* const barejid, const char* const resource, const char* message)
 {
+    if (message == NULL) {
+        return NULL;
+    }
     char* new_message = NULL;
     char* curr_message = strdup(message);
 

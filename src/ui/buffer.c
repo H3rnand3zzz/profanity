@@ -94,13 +94,9 @@ buffer_append(ProfBuff buffer, const char* show_char, int pad_indent, GDateTime*
     e->time = g_date_time_ref(time);
     e->display_from = display_from ? strdup(display_from) : NULL;
     e->from_jid = from_jid ? strdup(from_jid) : NULL;
-    e->message = strdup(message);
+    e->message = message ? strdup(message) : NULL;
     e->receipt = receipt;
-    if (id) {
-        e->id = strdup(id);
-    } else {
-        e->id = NULL;
-    }
+    e->id = id ? strdup(id) : NULL;
 
     if (g_slist_length(buffer->entries) == BUFF_SIZE) {
         _free_entry(buffer->entries->data);
