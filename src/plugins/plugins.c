@@ -476,11 +476,11 @@ plugins_on_disconnect(const char* const account_name, const char* const fulljid)
     g_list_free(values);
 }
 
-char*
-plugins_pre_chat_message_display(const char* const barejid, const char* const resource, const char* message)
+void
+plugins_pre_chat_message_display(const char* const barejid, const char* const resource, char* message)
 {
     char* new_message = NULL;
-    char* curr_message = strdup(message);
+    char* curr_message = message;
 
     GList* values = g_hash_table_get_values(plugins);
     GList* curr = values;
@@ -496,7 +496,7 @@ plugins_pre_chat_message_display(const char* const barejid, const char* const re
     }
     g_list_free(values);
 
-    return curr_message;
+    return;
 }
 
 void
