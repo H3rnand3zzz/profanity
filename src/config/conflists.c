@@ -44,45 +44,29 @@ conf_string_list_add(GKeyFile* keyfile, const char* const group, const char* con
 {
     gsize length;
     auto_gcharv gchar** list = g_key_file_get_string_list(keyfile, group, key, &length, NULL);
-    GList* glist = NULL;
 
-    // list found
-    if (list) {
-        int i = 0;
-        for (i = 0; i < length; i++) {
-            // item already in list, exit function
-            if (strcmp(list[i], item) == 0) {
-                g_list_free_full(glist, g_free);
-                g_strfreev(list);
-                return FALSE;
-            }
-            // add item to our g_list
-            glist = g_list_append(glist, strdup(list[i]));
-        }
-
-        // item not found, add to our g_list
-        glist = g_list_append(glist, strdup(item));
-
-        // create the new list entry
-        const gchar* new_list[g_list_length(glist) + 1];
-        GList* curr = glist;
-        i = 0;
-        while (curr) {
-            new_list[i++] = curr->data;
-            curr = g_list_next(curr);
-        }
-        new_list[i] = NULL;
-        g_key_file_set_string_list(keyfile, group, key, new_list, g_list_length(glist));
-
-        // list not found
-    } else {
-        const gchar* new_list[2];
-        new_list[0] = item;
-        new_list[1] = NULL;
+    if (!list) {
+        const gchar* new_list[2] = { item, NULL };
         g_key_file_set_string_list(keyfile, group, key, new_list, 1);
+        return TRUE;
     }
 
-    g_list_free_full(glist, g_free);
+    // Check if item is already in the list
+    for (gsize i = 0; i < length; ++i) {
+        if (strcmp(list[i], item) == 0) {
+            return FALSE;
+        }
+    }
+
+    // Add item to the existing list
+    gchar** new_list = g_new(gchar*, length + 2);
+    for (gsize i = 0; i < length; ++i) {
+        new_list[i] = g_strdup(list[i]);
+    }
+    new_list[length] = g_strdup(item);
+    new_list[length + 1] = NULL;
+
+    g_key_file_set_string_list(keyfile, group, key, (const gchar* const*)new_list, length + 1);
 
     return TRUE;
 }
